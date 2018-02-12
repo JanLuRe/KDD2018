@@ -86,16 +86,6 @@ from sklearn.metrics import classification_report
 import numpy as np
 
 
-# Note: train_test_split is missing in this mini-example --> results are not representative!!!
-
-# DATA
-from gpa.gpa import GlobalPatternAnalysis
-from tools.toy_data import ToyData
-from sklearn.svm import SVC
-from sklearn.metrics import classification_report
-import numpy as np
-
-
 # DATA
 X_train, Xd_train, y_train = ToyData.sample(100)
 X_test, Xd_test, y_test = ToyData.sample(100)
