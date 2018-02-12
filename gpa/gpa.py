@@ -1,8 +1,6 @@
-from segmentation import config
 from tools import percentage_bar as pb
 from segmentation.eIMMC import eIMMC
 from sklearn.model_selection import GridSearchCV
-import copy as cp
 import numpy as np
 import pickle
 
@@ -18,6 +16,8 @@ class GlobalPatternAnalysis:
         self.TIME_BASED = 1
         self.COUNT_BASED = 2
         self.clf = None
+        if eval_intervals[-1][1] > num_it:
+            eval_intervals = [(int(num_it / 2), num_it)]
 
         self.immc = eIMMC(debug=verbose)
         self.immc.cfg.set_attr(L, num_it, gamma, alpha, sigma, lam, d_gamma, d_lambda, d_base_prob, rho, boundary, num_it_gmm, sub_sample_gmm, k_gmm,

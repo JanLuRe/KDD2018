@@ -21,10 +21,11 @@ class ToyData:
         return users, labels
 
     @classmethod
-    def sample(cls, num_users, sdecay=.01, udecay=.1, udist=[.33, .33, .34], durations=False, dmean=[10, 20, 10], dvar=[1.0, 1.0, 1.0]):
+    def sample(cls, num_users, sdecay=.01, udecay=.05, udist=[.33, .33, .34], durations=False, dmean=[10, 20, 10], dvar=[1.0, 1.0, 1.0]):
         cls.durations = durations
         cls.dmean = dmean
         cls.dvar = dvar
+        cls.U = cls.U[:len(udist)]
         users = []
         users_durs = []
         cdists, labels = cls.sample_user(cls, num_users, udist)
@@ -34,6 +35,7 @@ class ToyData:
             up = 0.0
             user_active = True
             while user_active:
+                ucount = 0
                 session = []
                 session_durs = []
                 sp = 0.0
@@ -46,11 +48,13 @@ class ToyData:
                     if np.random.binomial(1, sp):
                         session_active = False
                     sp += sdecay
+                ucount += len(session)
                 user.append(session)
                 if cls.durations: user_durs.append(session_durs)
-                if np.random.binomial(1, up):
+                if np.random.binomial(1, up) and ucount > 30:
                     user_active = False
                 up += udecay
+                up = np.minimum(1.0, up)
             users.append(user)
             if cls.durations: users_durs.append(user_durs)
         if not cls.durations: users_durs = None
